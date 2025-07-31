@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import connectDB from "./db/database.js";
 import userRouter from "./routes/user.js"
+import TodoRouter from "./routes/todo.js";
 
 const app = express();
 
@@ -15,6 +16,8 @@ app.use(bodyParser.urlencoded({extended:true}))
 
 app.use("/api/user", userRouter)
 // api: /api/user/register or /api/user/login
+app.use("/api/todo", TodoRouter)
+// api: /api/todo/
 
 const PORT = process.env.PORT || 3000;
 
