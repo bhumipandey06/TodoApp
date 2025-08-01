@@ -6,7 +6,7 @@ export const register = async (req, res) => {
   try {
     const { fullname, email, password } = req.body;
     if (!fullname || !email || !password) {
-      return res.status(403).json({
+      return res.status(400).json({
         sucess: false,
         message: "All Fields are required.",
       });
@@ -14,7 +14,7 @@ export const register = async (req, res) => {
     // finding user with email already exists or not
     const user = await User.findOne({ email });
     if (user) {
-      return res.status(403).json({
+      return res.status(400).json({
         success: false,
         message: "This email id is already registered.",
       });
@@ -38,21 +38,21 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      return res.status(403).json({
+      return res.status(400).json({
         sucess: false,
         message: "All Fields are required.",
       });
     }
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(403).json({
+      return res.status(400).json({
         success: false,
         message: "Incorrect email or password.",
       });
     }
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
-      return res.status(403).json({
+      return res.status(400).json({
         success: false,
         message: "Incorrect email or password.",
       });
@@ -65,7 +65,7 @@ export const login = async (req, res) => {
       .status(200)
       .cookie("token", token, {
         httpOnly: true,
-        sameSite: "strict",
+        sameSite: "lax", //"strict"
         maxAge: 24 * 60 * 60 * 1000,
       })
       .json({

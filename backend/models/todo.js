@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
 
 const TodoSchema = new mongoose.Schema({
-  Title: {
+  title: {
     type: String,
     required: true,
   },
-  Description: {
+  description: {
     type: String,
     required: true,
   },
-});
+}); 
 
 export const Todo = mongoose.model("Todo", TodoSchema);

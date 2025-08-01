@@ -2,15 +2,15 @@ import { Todo } from "../models/todo.js";
 
 export const createTodo = async (req, res) => {
   try {
-    const { Title, Description } = req.body;
-    if (!Title || !Description) {
-      return res.status(403).json({
+    const { title, description } = req.body;
+    if (!title || !description) {
+      return res.status(400).json({
         success: false,
         message: "All fields are required.",
       });
     }
 
-    const todo = new Todo({ Title, Description });
+    const todo = new Todo({ title, description });
     todo.save();
 
     return res.status(201).json({
@@ -38,9 +38,9 @@ export const getAllTodos = async (req,res)=>{
 export const updateTodo = async(req,res)=>{
   try {
     const todoId = req.params.todoId
-    const {Title} = req.body
+    const {title} = req.body
     // const todo = await Todo.findById(todoId)
-    const todo = await Todo.findByIdAndUpdate(todoId,{Title},{new:true})
+    const todo = await Todo.findByIdAndUpdate(todoId,{title},{new:true})
 
     return res.status(200).json({
       success:true,
