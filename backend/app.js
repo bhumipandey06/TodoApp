@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import connectDB from "./db/database.js";
 import userRouter from "./routes/user.js"
 import TodoRouter from "./routes/todo.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
@@ -13,6 +14,7 @@ connectDB();
 
 app.use(express.json())
 app.use(bodyParser.urlencoded({extended:true}))
+app.use(cookieParser())
 
 app.use("/api/user", userRouter)
 // api: /api/user/register or /api/user/login
