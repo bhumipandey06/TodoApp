@@ -135,10 +135,10 @@ const Home = () => {
 
       <div className="grid grid-cols-5 gap-2 mt-5">
         {todos.map((todo) => (
-          <Card key={todo._id} className="bg-gray-200">
+          <Card key={todo._id} className="bg-gray-500">
             <CardHeader>
-              <CardTitle>{todo.title}</CardTitle>
-              <CardDescription>{todo.description}</CardDescription>
+              <CardTitle className="text-black ">{todo.title}</CardTitle>
+              <CardDescription className="text-gray-200">{todo.description}</CardDescription>
               <div className="flex gap-2 mt-2">
                 <Button onClick={() => handleEdit(todo)}>Edit</Button>
                 <Button
