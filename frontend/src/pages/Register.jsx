@@ -5,19 +5,22 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-const Login = () => {
+const Register = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState({
+    fullname: "",
     email: "",
     password: "",
   });
+
   const changeHandler = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
-  const loginHandler = async () => {
+
+  const registerHandler = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/user/login",
+        "http://localhost:3000/api/user/register",
         user,
         {
           headers: {
@@ -29,36 +32,42 @@ const Login = () => {
       console.log(res);
       if (res.data.success) {
         toast.success(res.data.message);
-        // alert(res.data.message)
-        localStorage.setItem("user", JSON.stringify(res.data.user));
-        navigate("/");
+        navigate("/login");
       }
     } catch (error) {
       toast.error(error.response.data.message);
-      // alert(error.response.data.message)
     }
   };
+
   return (
     <div className="flex flex-col w-1/4 mx-auto mt-10 text-white">
+      <Input
+        value={user.fullname}
+        onChange={changeHandler}
+        name="fullname"
+        type="text"
+        placeholder="Full Name"
+        className="mb-2"
+      />
       <Input
         value={user.email}
         onChange={changeHandler}
         name="email"
-        type="text"
+        type="email"
         placeholder="Email"
-        className=" mb-2"
+        className="mb-2"
       />
       <Input
         value={user.password}
         onChange={changeHandler}
         name="password"
-        type="text"
+        type="password"
         placeholder="Password"
-        className=" mb-2"
+        className="mb-2"
       />
-      <Button onClick={loginHandler}>Login</Button>
+      <Button onClick={registerHandler}>Register</Button>
     </div>
   );
 };
 
-export default Login;
+export default Register;

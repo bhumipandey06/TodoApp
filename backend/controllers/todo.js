@@ -23,44 +23,48 @@ export const createTodo = async (req, res) => {
   }
 };
 
-export const getAllTodos = async (req,res)=>{
+export const getAllTodos = async (req, res) => {
   try {
-    const todos = await Todo.find()
+    const todos = await Todo.find();
     return res.status(200).json({
-      success:true,
-      todos: todos
-    })
+      success: true,
+      todos: todos,
+    });
   } catch (error) {
     console.log(error);
   }
-}
+};
 
-export const updateTodo = async(req,res)=>{
+export const updateTodo = async (req, res) => {
   try {
-    const todoId = req.params.todoId
-    const {title} = req.body
+    const todoId = req.params.todoId;
+    const { title, description } = req.body;
     // const todo = await Todo.findById(todoId)
-    const todo = await Todo.findByIdAndUpdate(todoId,{title},{new:true})
+    const todo = await Todo.findByIdAndUpdate(
+      todoId,
+      { title, description },
+      { new: true }
+    );
 
     return res.status(200).json({
-      success:true,
+      success: true,
       todo,
-      message:"Todo Updated."
-    })
+      message: "Todo Updated.",
+    });
   } catch (error) {
     console.log(error);
   }
-}
+};
 
-export const deleteTodo=async(req,res)=>{
+export const deleteTodo = async (req, res) => {
   try {
-    const todoId = req.params.todoId
-    await Todo.findByIdAndDelete(todoId)
+    const todoId = req.params.todoId;
+    await Todo.findByIdAndDelete(todoId);
     return res.status(200).json({
-      success:true,
-      message:"Todo Deleted."
-    })
+      success: true,
+      message: "Todo Deleted.",
+    });
   } catch (error) {
     console.log(error);
   }
-}
+};

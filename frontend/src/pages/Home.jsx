@@ -5,12 +5,18 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import Navbar from "./Navbar";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 const Home = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [todos, setTodos] = useState([]);
+  const [editId, setEditId] = useState(null);
 
   const addTodoHandler = async () => {
     try {
@@ -25,7 +31,7 @@ const Home = () => {
       console.log(res);
       if (res.data.success) {
         toast.success(res.data.message);
-        setTodos([...todos,res.data.todo])
+        setTodos([...todos, res.data.todo]);
         setTitle("");
         setDescription("");
       }
@@ -33,6 +39,51 @@ const Home = () => {
       toast.error(error.response.data.message);
     }
   };
+
+  const deleteTodoHandler = async (id) => {
+    try {
+      const res = await axios.delete(`http://localhost:3000/api/todo/${id}`, {
+        withCredentials: true,
+      });
+      if (res.data.success) {
+        toast.success(res.data.message);
+        setTodos((prev) => prev.filter((todo) => todo._id !== id));
+      }
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  };
+
+  const updateTodoHandler = async () => {
+    try {
+      const res = await axios.put(
+        `http://localhost:3000/api/todo/${editId}`,
+        { title, description },
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+      if (res.data.success) {
+        toast.success(res.data.message);
+        setTodos((prev) =>
+          prev.map((todo) => (todo._id === editId ? res.data.todo : todo))
+        );
+
+        setTitle("");
+        setDescription("");
+        setEditId(null);
+      }
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  };
+  const handleEdit = (todo) => {
+    setTitle(todo.title);
+    setDescription(todo.description);
+    setEditId(todo._id);
+  };
+
   useEffect(() => {
     const fetchTodo = async () => {
       try {
@@ -50,7 +101,7 @@ const Home = () => {
   return (
     <div>
       <Navbar />
-      <div className="flex items-center gap-5 mt-5">
+      <div className="flex items-center gap-5 mt-5 text-white">
         <Input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -58,24 +109,48 @@ const Home = () => {
           placeholder="Add a New Todo..."
           className="w-1/4"
         />
-        <Button onClick={addTodoHandler}> Add Todo </Button>
+        <Button onClick={editId ? updateTodoHandler : addTodoHandler}>
+          {editId ? "Update Todo" : "Add Todo"}
+        </Button>
+        {editId && (
+          <Button
+            variant="outline"
+            onClick={() => {
+              setEditId(null);
+              setTitle("");
+              setDescription("");
+            }}
+          >
+            Cancel Edit
+          </Button>
+        )}
       </div>
+
       <Textarea
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         placeholder="Write A Description..."
-        className="w-1/4 mt-2"
+        className="w-1/4 mt-2 text-white"
       />
 
       <div className="grid grid-cols-5 gap-2 mt-5">
-      {todos.map((todo) => (
-        <Card key={todo._id} className="bg-gray-200">
-          <CardHeader>
-            <CardTitle>{todo.title}</CardTitle>
-            <CardDescription>{todo.description}</CardDescription>
-          </CardHeader>
-        </Card>
-      ))}
+        {todos.map((todo) => (
+          <Card key={todo._id} className="bg-gray-200">
+            <CardHeader>
+              <CardTitle>{todo.title}</CardTitle>
+              <CardDescription>{todo.description}</CardDescription>
+              <div className="flex gap-2 mt-2">
+                <Button onClick={() => handleEdit(todo)}>Edit</Button>
+                <Button
+                  variant="destructive"
+                  onClick={() => deleteTodoHandler(todo._id)}
+                >
+                  Delete
+                </Button>
+              </div>
+            </CardHeader>
+          </Card>
+        ))}
       </div>
     </div>
   );
