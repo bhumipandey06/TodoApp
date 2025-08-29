@@ -21,7 +21,7 @@ const Home = () => {
   const addTodoHandler = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/todo/",
+        "https://todoapp-gz7f.onrender.com/api/todo/",
         { title, description },
         {
           headers: { "Content-Type": "application/json" },
@@ -42,7 +42,7 @@ const Home = () => {
 
   const deleteTodoHandler = async (id) => {
     try {
-      const res = await axios.delete(`http://localhost:3000/api/todo/${id}`, {
+      const res = await axios.delete(`https://todoapp-gz7f.onrender.com/api/todo/${id}`, {
         withCredentials: true,
       });
       if (res.data.success) {
@@ -57,7 +57,7 @@ const Home = () => {
   const updateTodoHandler = async () => {
     try {
       const res = await axios.put(
-        `http://localhost:3000/api/todo/${editId}`,
+        `https://todoapp-gz7f.onrender.com/api/todo/${editId}`,
         { title, description },
         {
           headers: { "Content-Type": "application/json" },
@@ -87,7 +87,7 @@ const Home = () => {
   useEffect(() => {
     const fetchTodo = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/todo/");
+        const res = await axios.get("https://todoapp-gz7f.onrender.com/api/todo/");
         if (res.data.success) {
           setTodos(res.data.todos);
         }

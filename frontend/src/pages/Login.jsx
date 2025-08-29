@@ -17,7 +17,7 @@ const Login = () => {
   const loginHandler = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/user/login",
+        "https://todoapp-gz7f.onrender.com/api/user/login",
         user,
         {
           headers: {

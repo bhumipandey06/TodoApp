@@ -17,7 +17,7 @@ const Navbar = () => {
   }, []);
   const logoutHandler = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/user/logout");
+      const res = await axios.get("https://todoapp-gz7f.onrender.com/api/user/logout");
       if (res.data.success) {
         toast.success(res.data.message);
         localStorage.removeItem("user");

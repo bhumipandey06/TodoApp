@@ -20,7 +20,7 @@ const Register = () => {
   const registerHandler = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/user/register",
+        "https://todoapp-gz7f.onrender.com/api/user/register",
         user,
         {
           headers: {
